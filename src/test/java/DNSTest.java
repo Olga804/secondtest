@@ -66,7 +66,7 @@ public class DNSTest {
         //добавить проверку гарантии
         basketPage.delete("Detroit");
        WebDriverWait wait = new WebDriverWait(driver, 10000);
-       wait.until( ExpectedConditions.presenceOfElementLocated(By.xpath(".//div/a[contains(text(),'Detroit')]")) );
+       wait.until( ExpectedConditions.not(visibilityOfElementLocated(By.xpath(".//div/a[contains(text(),'Detroit')]"))) );
         basketPage.isElementPresent("Detroit", false);
        sum = Trash.get("product PS with");
        basketPage.checkTotalPriceIs(sum);
