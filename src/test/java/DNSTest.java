@@ -49,31 +49,35 @@ public class DNSTest {
 
         ResultsPage resultsPage = new ResultsPage(driver);
         resultsPage.chooseProduct("PlayStation 4 Slim Black");
-        new Select(driver.findElement(By.xpath("//SELECT[@class='form-control select']"))).selectByVisibleText("2 года"); //добавляем PS жмем гарантию на 2 года
+       // new Select(driver.findElement(By.xpath("//SELECT[@class='form-control select']"))).selectByVisibleText("2 года"); //добавляем PS жмем гарантию на 2 года
         ProductCard productCard = new ProductCard(driver);
         productCard.savePriceOfCurrentProduct("product PS without");
         productCard.dopGarant("2 года");
-        // дождаться изменения цены
         productCard.savePriceOfCurrentProduct("product PS with");
         productCard.addToBasket();
         mainPage.search("Detroit");
-        productCard.savePriceOfCurrentProduct("product D");
+        productCard.savePriceOfCurrentProduct("Detroit");
         productCard.addToBasket();
         BasketPage basketPage = productCard.goToBasket();
-        //добавить проверку цены приставки с гарантией
-        //добавить проверку цены игрушки
-        //добавить проверку суммы
+        basketPage.chekPrice("PlayStation",Trash.get("product PS without"));
+        basketPage.chekPrice("Detroit",Trash.get("Detroit"));
+        Integer sum = Trash.get("product PS with")+Trash.get("Detroit");
+        basketPage.checkTotalPriceIs(sum);
         //добавить проверку гарантии
-        basketPage.delete();
-        //добавить проверку удаления
-        //добавить проверку суммы
-        basketPage.pressPlus();
-        //вставить ожидание надатия плюсика
-        basketPage.pressPlus();
-        //добавить проверку утроенной цены приставки
+        basketPage.delete("Detroit");
+       WebDriverWait wait = new WebDriverWait(driver, 10000);
+       wait.until( ExpectedConditions.presenceOfElementLocated(By.xpath(".//div/a[contains(text(),'Detroit')]")) );
+        basketPage.isElementPresent("Detroit", false);
+       sum = Trash.get("product PS with");
+       basketPage.checkTotalPriceIs(sum);
+        basketPage.pressPlus("PlayStation");
+        basketPage.pressPlus("PlayStation");
+        sum = Trash.get("product PS with")*3;
+        basketPage.checkTotalPriceIs(sum);
         basketPage.retern();
-        //добавить проверку возврата
-        //добавить проверку цены
+        basketPage.isElementPresent("Detroit", true);
+        sum = Trash.get("product PS with")*3+Trash.get("Detroit");
+        basketPage.checkTotalPriceIs(sum);
 
     }
 
