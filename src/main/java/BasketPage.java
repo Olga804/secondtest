@@ -10,11 +10,10 @@ import java.beans.IntrospectionException;
 
 public class BasketPage {
     WebDriver driver;
+   // WebDriverWait wait = new WebDriverWait(driver, 5000);
 
    By totalPrice = By.xpath("//div[contains(text(),'Итого')]/following-sibling::*/span");
-    By plus = By.xpath("//BUTTON[contains(@class, 'button_plus')]");
-    By del = By.xpath("(//I[@class='remove-button__icon'])[2]");
-    By ret = By.xpath("//SPAN[@class='pseudo-link'][text()='Вернуть удалённый товар']");
+   By ret = By.xpath("//SPAN[@class='pseudo-link'][text()='Вернуть удалённый товар']");
 
    // By onePrice = By.xpath (String.format(".//div/a[contains(text(),'%s')]/../../following-sibling::*//div[@class='item-price']/span"));
     public BasketPage(WebDriver driver) {
@@ -22,8 +21,8 @@ public class BasketPage {
     }
 
     public void checkTotalPriceIs(Integer value){
-
         String price = driver.findElement(totalPrice).getAttribute("textContent");
+        Integer x=Trash.get("AllPrice");
         Trash.put("AllPrice", price);
         Assert.assertEquals(value, Trash.get("AllPrice"));
     }
@@ -35,7 +34,7 @@ public class BasketPage {
        Assert.assertEquals(Trash.get("in basket"), value);
    }
     public void pressPlus(String name){
-        String product = String.format(".//div/a[contains(text(),'PlayStation')]/../../following-sibling::*//div/button[contains(@class,'button_plus')]", name);
+        String product = String.format(".//div/a[contains(text(),'%s')]/../../following-sibling::*//div/button[contains(@class,'button_plus')]", name);
         driver.findElement(By.xpath(product)).isEnabled();
         driver.findElement(By.xpath(product)).click();
         WebDriverWait wait = new WebDriverWait(driver, 5000);
@@ -71,6 +70,8 @@ public class BasketPage {
 
 
     public void retern(){
+        WebDriverWait wait = new WebDriverWait(driver, 5000);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(ret));
         driver.findElement(ret).click();
     }
 
