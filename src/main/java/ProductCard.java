@@ -24,7 +24,7 @@ public class ProductCard {
     }
 
     public void savePriceOfCurrentProduct(String key){
-        String value = driver.findElement(productPrice).getAttribute("data-price-value");
+        String value = driver.findElement(productPrice).getAttribute("textContent");
         Trash.put(key, value);
     }
 
