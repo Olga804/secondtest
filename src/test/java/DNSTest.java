@@ -42,7 +42,7 @@ public class DNSTest {
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         Trash.driver = driver;
     }
-    @Test
+     @Test
     public void checkPS(){
         MainPage mainPage = new MainPage();
         mainPage.search("playstation");
@@ -65,19 +65,21 @@ public class DNSTest {
         basketPage.checkTotalPriceIs(sum);
         //добавить проверку гарантии
         basketPage.delete("Detroit");
-       WebDriverWait wait = new WebDriverWait(driver, 10000);
+       WebDriverWait wait = new WebDriverWait(driver, 5000);
        wait.until( ExpectedConditions.not(visibilityOfElementLocated(By.xpath(".//div/a[contains(text(),'Detroit')]"))) );
         basketPage.isElementPresent("Detroit", false);
        sum = Trash.get("product PS with");
        basketPage.checkTotalPriceIs(sum);
-        basketPage.pressPlus("PlayStation");
-        basketPage.pressPlus("PlayStation");
-        sum = Trash.get("product PS with")*3;
-        basketPage.checkTotalPriceIs(sum);
-        basketPage.retern();
-        basketPage.isElementPresent("Detroit", true);
-        sum = Trash.get("product PS with")*3+Trash.get("Detroit");
-        basketPage.checkTotalPriceIs(sum);
+       //++++++++++++++++++++++++++++++++++
+       // basketPage.pressPlus("PlayStation");
+      //  basketPage.pressPlus("PlayStation");
+      //  sum = Trash.get("product PS with")*3;
+       // basketPage.checkTotalPriceIs(sum);
+        basketPage.retern();//+
+        wait.until( ExpectedConditions.visibilityOfElementLocated(By.xpath(".//div/a[contains(text(),'Detroit')]"))) ;//+
+        basketPage.isElementPresent("Detroit", true);//+
+        sum = Trash.get("product PS with")+Trash.get("Detroit");//+
+        basketPage.checkTotalPriceIs(sum);//+
 
     }
 
