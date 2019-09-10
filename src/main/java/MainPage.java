@@ -11,7 +11,7 @@ public class MainPage extends BasePage {
     private WebElement searchTextField;
 
 
-    @FindBy(xpath = "(//SPAN[@class='ui-input-search__icon ui-input-search__icon_search'])[2]")
+    @FindBy(xpath = "(//SPAN[@class='ui-input-search__icon ui-input-search__icon_search'])[2]")//ОЛЯ, ИСПРАВЬ ЭТО!!!!!
     WebElement searchButton;
 
 
@@ -24,3 +24,4 @@ public class MainPage extends BasePage {
     }
 
 }
+
