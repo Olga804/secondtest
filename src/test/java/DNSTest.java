@@ -9,6 +9,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.concurrent.TimeUnit;
 
+import static org.junit.Assert.assertEquals;
+import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
+
 /*
 1) открыть dns-shop
 2) в поиске найти playstation
@@ -20,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 8) выполнить поиск Detroit
 9) запомнить цену
 10) нажать купить
-11) проверить что цена корзины стала равна сумме покупок
+11) проверить что цена корзины стала равна сумме покупок!!!!
 12) перейри в корзину
 13) проверить, что для приставки выбрана гарантия на 2 года
 14) проверить цену каждого из товаров и сумму
@@ -42,14 +45,13 @@ public class DNSTest {
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         Trash.driver = driver;
     }
-     @Test
+    @Test
     public void checkPS(){
         MainPage mainPage = new MainPage();
         mainPage.search("playstation");
-
         ResultsPage resultsPage = new ResultsPage(driver);
         resultsPage.chooseProduct("PlayStation 4 Slim Black");
-       // new Select(driver.findElement(By.xpath("//SELECT[@class='form-control select']"))).selectByVisibleText("2 года"); //добавляем PS жмем гарантию на 2 года
+
         ProductCard productCard = new ProductCard(driver);
         productCard.savePriceOfCurrentProduct("product PS without");
         productCard.dopGarant("2 года");
@@ -58,29 +60,28 @@ public class DNSTest {
         mainPage.search("Detroit");
         productCard.savePriceOfCurrentProduct("Detroit");
         productCard.addToBasket();
+        Integer sum = Trash.get("product PS with")+Trash.get("Detroit");
+        productCard.checkTotalPriceIs(sum);
         BasketPage basketPage = productCard.goToBasket();
+        //13) проверить, что для приставки выбрана гарантия на 2 года
+        basketPage.isSelected(false, false, true, "PlayStation");
         basketPage.chekPrice("PlayStation",Trash.get("product PS without"));
         basketPage.chekPrice("Detroit",Trash.get("Detroit"));
-        Integer sum = Trash.get("product PS with")+Trash.get("Detroit");
         basketPage.checkTotalPriceIs(sum);
-        //добавить проверку гарантии
         basketPage.delete("Detroit");
-       WebDriverWait wait = new WebDriverWait(driver, 5000);
-       wait.until( ExpectedConditions.not(visibilityOfElementLocated(By.xpath(".//div/a[contains(text(),'Detroit')]"))) );
+        Wait<WebDriver> wait = new WebDriverWait(driver, 5, 1000);
+        wait.until(ExpectedConditions.numberOfElementsToBe(By.xpath(".//div/a[contains(text(),'Detroit')]"), 0));
         basketPage.isElementPresent("Detroit", false);
-       sum = Trash.get("product PS with");
-       basketPage.checkTotalPriceIs(sum);
-       //++++++++++++++++++++++++++++++++++
-       // basketPage.pressPlus("PlayStation");
-      //  basketPage.pressPlus("PlayStation");
-      //  sum = Trash.get("product PS with")*3;
-       // basketPage.checkTotalPriceIs(sum);
-        basketPage.retern();//+
-        wait.until( ExpectedConditions.visibilityOfElementLocated(By.xpath(".//div/a[contains(text(),'Detroit')]"))) ;//+
-        basketPage.isElementPresent("Detroit", true);//+
-        sum = Trash.get("product PS with")+Trash.get("Detroit");//+
-        basketPage.checkTotalPriceIs(sum);//+
-
+        sum = Trash.get("product PS with");
+        basketPage.checkTotalPriceIs(sum);
+        basketPage.pressPlus("PlayStation");
+        basketPage.pressPlus("PlayStation");
+        sum = Trash.get("product PS with")*3;
+        basketPage.checkTotalPriceIs(sum);
+        basketPage.retern();
+        wait.until(ExpectedConditions.numberOfElementsToBe(By.xpath(".//div/a[contains(text(),'Detroit')]"), 1));
+        sum = Trash.get("product PS with")*3 + Trash.get("Detroit");
+        basketPage.checkTotalPriceIs(sum);
     }
 
     @AfterClass
