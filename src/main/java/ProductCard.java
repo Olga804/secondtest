@@ -1,3 +1,4 @@
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
@@ -15,7 +16,6 @@ public class ProductCard {
     By goToBasket = By.xpath("//a[contains(@rel, 'nofollow noopener')]/span/span");
     By formGarant = By.xpath("//SELECT[@class='form-control select']");
 
-   // By addedToBasketFlag = By.id("WA_check_mark");
 
     WebDriver driver;
     public ProductCard(WebDriver driver){
@@ -30,9 +30,9 @@ public class ProductCard {
 
     public void addToBasket(){
         driver.findElement(addToBasket).click();
-       // WebDriverWait wait = new WebDriverWait(driver, 30);
-       // wait.pollingEvery(1, TimeUnit.SECONDS);
-        //wait.until(ExpectedConditions.elementToBeClickable(addedToBasketFlag));
+
+
+
     }
 
     public BasketPage goToBasket(){
@@ -43,10 +43,10 @@ public class ProductCard {
         new Select(driver.findElement(formGarant)).selectByVisibleText(text);
     }
 
-    /*public void stop(){
-        private final Wait<WebDriver> wait = new WebDriverWait(driver,5, 1000) ;
-        wait.until(productPrice.equals());
-    }
 
-     */
+    public void checkTotalPriceIs(Integer value){
+        String price = driver.findElement(By.xpath("//span[contains(@data-of,'totalPrice')]")).getAttribute("textContent");
+        Trash.put("AllPrice", price);
+        Assert.assertEquals(value, Trash.get("AllPrice"));
+    }
 }
