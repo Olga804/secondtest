@@ -83,19 +83,18 @@ public class BasketPage {
               "/../../following-sibling::*//div/button[contains(@class,'button_plus')]" +
               "/../../../following-sibling::*//div/label[contains(text(),'Обычная')]",name);
       WebElement checkBox = driver.findElement(By.xpath(product1));
-      Assert.assertEquals("x",x,checkBox.getAttribute("checked") );
+      Assert.assertEquals("x",x,checkBox.isSelected() );
       String product2 = String.format(".//div/a[contains(text(),'%s')]" +
               "/../../following-sibling::*//div/button[contains(@class,'button_plus')]" +
               "/../../../following-sibling::*//div/label[contains(text(),'1 год')]",name);
       checkBox = driver.findElement(By.xpath(product2));
-      Assert.assertEquals("y",y,checkBox.getAttribute("checked") );
+      Assert.assertEquals("y",y,checkBox.isSelected() );
       String product3 = String.format(".//div/a[contains(text(),'%s')]" +
               "/../../following-sibling::*//div/button[contains(@class,'button_plus')]" +
               "/../../../following-sibling::*//div/label[contains(text(),'2 года')]",name);
       checkBox = driver.findElement(By.xpath(product3));
-      Assert.assertEquals("z",z,checkBox.getAttribute("checked") );
+      Assert.assertEquals("z",z,checkBox.isSelected() );
 
 
 
   }
-}
