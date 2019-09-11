@@ -2,12 +2,8 @@ import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.Wait;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.util.concurrent.TimeUnit;
+import org.openqa.selenium.support.ui.*;
+import java.util.function.Function;
 
 public class ProductCard {
 
@@ -17,7 +13,7 @@ public class ProductCard {
     By formGarant = By.xpath("//SELECT[@class='form-control select']");
 
 
-    WebDriver driver;
+    static WebDriver driver;
     public ProductCard(WebDriver driver){
         this.driver = driver;
         PageFactory.initElements(driver, this);
@@ -29,10 +25,7 @@ public class ProductCard {
     }
 
     public void addToBasket(){
-        driver.findElement(addToBasket).click();
-
-
-
+        wai(addToBasket,By.xpath("//span[contains(@data-of,'totalPrice')]"));
     }
 
     public BasketPage goToBasket(){
@@ -45,8 +38,22 @@ public class ProductCard {
 
 
     public void checkTotalPriceIs(Integer value){
-        String price = driver.findElement(By.xpath("//span[contains(@data-of,'totalPrice')]")).getAttribute("textContent");
+        String price = driver.findElement(By.xpath("(//span[contains(@data-of,'totalPrice')])[2]")).getAttribute("textContent");
         Trash.put("AllPrice", price);
         Assert.assertEquals(value, Trash.get("AllPrice"));
+    }
+    public static void wai(By where, By what){
+        String oldValue = driver.findElement(what).getAttribute("textContent");
+        Function<? super WebDriver, Object> valueChanged = new ExpectedCondition<Object>() {
+            @Override
+            public Boolean apply(WebDriver webDriver) {
+                return !webDriver.findElement(what).getAttribute("textContent").equals(oldValue);
+            }
+        };
+        //действие для изменения значения
+        WebDriverWait wait = new WebDriverWait(driver, 5000);
+        driver.findElement(where).click();
+        wait.until(valueChanged);
+
     }
 }
