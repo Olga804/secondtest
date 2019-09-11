@@ -3,14 +3,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.beans.IntrospectionException;
-import java.util.function.Function;
-
-import static java.lang.Integer.parseInt;
 
 
 public class BasketPage {
@@ -37,19 +31,8 @@ public class BasketPage {
    }
     public void pressPlus(String name){
         String product = String.format(".//div/a[contains(text(),'%s')]/../../following-sibling::*//div/button[contains(@class,'button_plus')]", name);
-        //WebDriverWait wait = new WebDriverWait(driver, 5000);
-        //changeValue("//span[contains(text(), 'Моя корзина')]/following-sibling::*");
-        String oldValue = driver.findElement(By.xpath("//span[contains(text(), 'Моя корзина')]/following-sibling::*")).getText();
-        Function<? super WebDriver, Object> valueChanged = new ExpectedCondition<Object>() {
-            @Override
-            public Boolean apply(WebDriver webDriver) {
-                return !webDriver.findElement(By.xpath("//span[contains(text(), 'Моя корзина')]/following-sibling::*")).getText().equals(oldValue);
-            }
-        };
-        //действие для изменения значения
-        WebDriverWait wait = new WebDriverWait(driver, 5000);
-        driver.findElement(By.xpath(product)).click();
-        wait.until(valueChanged);
+        ProductCard.wai( By.xpath(product),By.xpath("//span[contains(text(), 'Моя корзина')]/following-sibling::*"));
+
 
     }
 
@@ -76,25 +59,26 @@ public class BasketPage {
         wait.until(ExpectedConditions.visibilityOfElementLocated(ret));
         driver.findElement(ret).click();
     }
-  
+
 
   public void isSelected(boolean x, boolean y, boolean z, String name ){
       String product1 = String.format(".//div/a[contains(text(),'%s')]" +
               "/../../following-sibling::*//div/button[contains(@class,'button_plus')]" +
-              "/../../../following-sibling::*//div/label[contains(text(),'Обычная')]",name);
+              "/../../../following-sibling::*//div/label[contains(text(),'Обычная')]/..",name);
       WebElement checkBox = driver.findElement(By.xpath(product1));
-      Assert.assertEquals("x",x,checkBox.isSelected() );
+      Assert.assertEquals("x",x,checkBox.getAttribute("class").contains("checked") );
       String product2 = String.format(".//div/a[contains(text(),'%s')]" +
               "/../../following-sibling::*//div/button[contains(@class,'button_plus')]" +
-              "/../../../following-sibling::*//div/label[contains(text(),'1 год')]",name);
+              "/../../../following-sibling::*//div/label[contains(text(),'1 год')]/..",name);
       checkBox = driver.findElement(By.xpath(product2));
-      Assert.assertEquals("y",y,checkBox.isSelected() );
+      Assert.assertEquals("y",y,checkBox.getAttribute("class").contains("checked") );
       String product3 = String.format(".//div/a[contains(text(),'%s')]" +
               "/../../following-sibling::*//div/button[contains(@class,'button_plus')]" +
-              "/../../../following-sibling::*//div/label[contains(text(),'2 года')]",name);
+              "/../../../following-sibling::*//div/label[contains(text(),'2 года')]/..",name);
       checkBox = driver.findElement(By.xpath(product3));
-      Assert.assertEquals("z",z,checkBox.isSelected() );
+      Assert.assertEquals("z",z,checkBox.getAttribute("class").contains("checked"));
 
 
 
   }
+}
