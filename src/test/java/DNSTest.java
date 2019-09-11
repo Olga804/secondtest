@@ -3,14 +3,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.util.concurrent.TimeUnit;
-
-import static org.junit.Assert.assertEquals;
-import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
 
 /*
 1) открыть dns-shop
@@ -62,8 +57,8 @@ public class DNSTest {
         productCard.addToBasket();
         Integer sum = Trash.get("product PS with")+Trash.get("Detroit");
         productCard.checkTotalPriceIs(sum);
+
         BasketPage basketPage = productCard.goToBasket();
-        //13) проверить, что для приставки выбрана гарантия на 2 года
         basketPage.isSelected(false, false, true, "PlayStation");
         basketPage.chekPrice("PlayStation",Trash.get("product PS without"));
         basketPage.chekPrice("Detroit",Trash.get("Detroit"));
